@@ -1,0 +1,1 @@
+export const seasonOption = ['winter', 'spring', 'summer', 'autumn']
