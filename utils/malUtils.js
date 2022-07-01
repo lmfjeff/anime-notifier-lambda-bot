@@ -16,7 +16,7 @@ export function malAnime2DynamodbAnime(malAnime) {
     broadcast,
     source,
     studios,
-    num_episodes
+    num_episodes,
   } = malAnime
   const year = start_season?.year
   const season =
@@ -43,7 +43,7 @@ export function malAnime2DynamodbAnime(malAnime) {
   return dynamodbAnime
 }
 
-export function modifyOldAnimeWithNewAnime(oldAnime, newAnime) {
+export function newAnimeFromMal(oldAnime, newAnime) {
   const propsToUpdate = [
     "yearSeason",
     "picture",
@@ -57,7 +57,7 @@ export function modifyOldAnimeWithNewAnime(oldAnime, newAnime) {
     "genres",
     "source",
     "studios",
-    "numEpisodes"
+    "numEpisodes",
   ]
   const modifiedItem = {}
   // if the picture is relative path img/nanoid.webp, not update
@@ -69,6 +69,21 @@ export function modifyOldAnimeWithNewAnime(oldAnime, newAnime) {
     if (!equals(oldAnime[prop], newAnime[prop])) {
       if (prop === "picture" && regex.test(oldAnime[prop])) continue
 
+      modifiedItem[prop] = newAnime[prop]
+    }
+  }
+  if (isEmpty(modifiedItem)) return null
+  return {
+    id: oldAnime.id,
+    ...modifiedItem,
+  }
+}
+
+export function newAnimeFromAcg(oldAnime, newAnime) {
+  const propsToUpdate = ["title", "summary"]
+  const modifiedItem = {}
+  for (const prop of propsToUpdate) {
+    if (!equals(oldAnime[prop], newAnime[prop]) && newAnime[prop]) {
       modifiedItem[prop] = newAnime[prop]
     }
   }

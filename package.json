@@ -6,7 +6,8 @@
   "scripts": {
     "test-mal": "run-func malBot.js handler",
     "test-image": "run-func imageBot.js handler",
-    "test-db": "run-func dbBot.js handler"
+    "test-db": "run-func dbBot.js handler",
+    "test-acg": "run-func acgBot.js handler"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,8 @@
     "@aws-sdk/lib-dynamodb": "^3.81.0",
     "aws-xray-sdk": "^3.3.5",
     "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dayjs": "^1.11.3",
     "nanoid": "^3.3.3",
     "ramda": "^0.28.0",
     "run-func": "^3.0.0",

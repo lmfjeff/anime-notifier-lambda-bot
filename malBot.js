@@ -7,10 +7,7 @@ import { getSeasonalAnime, refreshToken } from "./mal/malApi.js"
 import { getMalAuth, putMalAuth } from "./ssm/authService.js"
 import { isDev } from "./utils/config.js"
 import { getYearSeason } from "./utils/date.js"
-import {
-  malAnime2DynamodbAnime,
-  modifyOldAnimeWithNewAnime,
-} from "./utils/malUtils.js"
+import { malAnime2DynamodbAnime, newAnimeFromMal } from "./utils/malUtils.js"
 
 export async function handler() {
   let malAuth
@@ -23,8 +20,8 @@ export async function handler() {
     await putMalAuth(malAuth)
   }
 
-  let {year, season} = getYearSeason()
-  if (season === 'autumn') season = 'fall'
+  let { year, season } = getYearSeason()
+  if (season === "autumn") season = "fall"
 
   // get seasonal anime list from mal api
   const data = await getSeasonalAnime(malAuth, year, season)
@@ -47,7 +44,7 @@ export async function handler() {
       console.log("New anime added: ", newAnime.title)
     } else {
       // if exist, compare mal anime with db anime, update if updated
-      const modifiedAnime = modifyOldAnimeWithNewAnime(anime, newAnime)
+      const modifiedAnime = newAnimeFromMal(anime, newAnime)
       if (!modifiedAnime) continue
       await updateAnime({ anime: modifiedAnime })
       console.log("Anime updated: ", anime.title)
